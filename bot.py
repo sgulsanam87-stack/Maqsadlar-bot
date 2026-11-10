@@ -21,6 +21,8 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
+import content
+
 TZ = timezone(timedelta(hours=5))
 WINDOW = timedelta(hours=6)
 
@@ -125,19 +127,30 @@ def build_events(day, city, goals):
     lat, lng = CITIES[city]
     t = prayer_times(day, lat, lng)
     table = "\n".join(f"{PRAYER_NAMES[k]}: {fmt(v)}" for k, v in t.items())
+    extra = {
+        "bomdod": ("📖 Kunning oyati", content.OYAT, 0),
+        "peshin": ("💼 Biznes uchun", content.BIZNES, 0),
+        "asr": ("🌿 Hadis", content.HADIS, 0),
+        "shom": ("💡 Foydali ilm", content.ILM, 0),
+        "xufton": ("🌿 Hadis", content.HADIS, 7),
+    }
     events = []
     for i, key in enumerate(["bomdod", "peshin", "asr", "shom", "xufton"]):
+        title, items, shift = extra[key]
         text = f"🕌 {PRAYER_NAMES[key]} vaqti kirdi ({fmt(t[key])}, {city})."
         if key == "bomdod":
-            text += (f"\n\nAssalomu alaykum! Bugungi maqsad:\n✨ {goal_of_day(goals, day)}"
-                     f"\n\nBugungi namoz vaqtlari:\n{table}")
+            text += f"\n\nAssalomu alaykum! Bugungi maqsad:\n✨ {goal_of_day(goals, day)}"
         else:
             text += f"\n\nYodingizda bo'lsin: {goal_of_day(goals, day, i)}"
+        text += f"\n\n{title}:\n{content.pick(items, day, shift)}"
+        if key == "bomdod":
+            text += f"\n\nBugungi namoz vaqtlari:\n{table}"
         events.append((t[key], text))
     lines = "\n".join(f"▫️ {g}" for g in goals)
     evening = datetime(day.year, day.month, day.day, *EVENING, tzinfo=TZ)
     events.append((evening, "🌙 Kun yakuni. Bugun maqsadlaringiz yo'lida nima qildingiz?\n\n"
-                   f"{lines}\n\nIlovada bugungi amallaringizni belgilab qo'ying."))
+                   f"{lines}\n\n📖 Kun yakunida:\n{content.pick(content.OYAT, day, 11)}"
+                   "\n\nIlovada bugungi amallaringizni belgilab qo'ying."))
     return events
 
 
