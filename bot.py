@@ -142,7 +142,7 @@ def build_events(day, city, goals):
 
 # ---------- telegram ----------
 def tg(method, **params):
-    token = os.environ["TELEGRAM_TOKEN"].strip()
+    token = "".join(os.environ["TELEGRAM_TOKEN"].split())  # drop spaces/line breaks from pasting
     data = urllib.parse.urlencode(params).encode()
     req = urllib.request.Request(f"https://api.telegram.org/bot{token}/{method}", data=data)
     for attempt in range(4):
