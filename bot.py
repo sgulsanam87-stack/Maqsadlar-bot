@@ -157,6 +157,8 @@ def tg(method, **params):
 
 def chat_id():
     cid = os.environ.get("CHAT_ID", "").strip()
+    if not cid and os.path.exists("chat_id.txt"):
+        cid = open("chat_id.txt").read().strip()
     if cid:
         return cid
     ups = tg("getUpdates").get("result", [])
@@ -186,6 +188,8 @@ def main():
     if mode == "setup":
         cid = chat_id()
         print(f"CHAT_ID={cid}")
+        with open("chat_id.txt", "w") as f:  # saved so later runs know where to send
+            f.write(cid + "\n")
         send(cid, "✅ Bot ulandi! Endi har kuni namoz vaqtlarida va kechqurun maqsadlaringizni eslatib turaman.")
         return
     if mode == "test":

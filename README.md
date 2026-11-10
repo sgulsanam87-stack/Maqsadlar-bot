@@ -7,7 +7,7 @@ Sozlamalar (Settings → Secrets and variables → Actions):
 
 - `TELEGRAM_TOKEN` (secret): @BotFather bergan token
 - `GOALS` (secret): har qatorda bitta maqsad
-- `CHAT_ID` (secret yoki variable): Telegram chat id. "setup" rejimida aniqlanadi
+- Telegram chat id: botga /start yozib, `setup` rejimini ishga tushirsangiz, `chat_id.txt` ga avtomatik saqlanadi
 - `CITY` (variable, ixtiyoriy): shahar nomi, masalan `Toshkent`. Standart: `Samarqand`
 
 Sinab ko'rish: Actions → Eslatmalar → Run workflow → `test`.
