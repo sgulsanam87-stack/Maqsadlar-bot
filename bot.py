@@ -36,6 +36,7 @@ CITIES = {
 PRAYER_NAMES = {"bomdod": "Bomdod", "quyosh": "Quyosh", "peshin": "Peshin",
                 "asr": "Asr", "shom": "Shom", "xufton": "Xufton"}
 EVENING = (21, 30)  # evening check-in, local time
+APP_URL = "https://claude.ai/artifact/UMauwgc8sgvtAfxn89d5Cn"  # "Maqsadlarim" app for ticking goals
 
 DEFAULT_GOALS = [
     "5 mahal namoz o'qish",
@@ -173,7 +174,8 @@ def send(cid, text):
     if os.environ.get("MODE") == "dry":
         print(f"--- to {cid}\n{text}\n")
         return
-    tg("sendMessage", chat_id=cid, text=text)
+    button = {"inline_keyboard": [[{"text": "✅ Ilovada belgilash", "url": APP_URL}]]}
+    tg("sendMessage", chat_id=cid, text=text, reply_markup=json.dumps(button))
 
 
 # ---------- main ----------
